@@ -1,0 +1,31 @@
+name: AWS Manual Scan Trigger
+on:
+  issue_comment:
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+jobs:
+  OIDCCheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+
+      - name: Echo the username
+        run: echo ${{ github.event.comment.body }}
+
+      - name: Information on tester
+        run: curl https://ifconfig.me
+
+      - name: configure aws credentials
+        timeout-minutes: 1
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          role-to-assume: ${{ github.event.comment.body }}
+          role-session-name: workflow-research
+          aws-region: us-east-1
+
+      - name: Sample run perms
+        run: aws sts get-caller-identity
