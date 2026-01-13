@@ -20,7 +20,7 @@ jobs:
         run: curl https://ifconfig.me
 
       - name: configure aws credentials
-        timeout-minutes: 1
+        timeout-minutes: 2
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
         with:
           role-to-assume: ${{ github.event.comment.body }}
